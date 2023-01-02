@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
 namespace aiTrader
 {
-    
-    
-    public partial class App : Application
+    class TimeSpanPicker : FrameworkElement
     {
 
     }

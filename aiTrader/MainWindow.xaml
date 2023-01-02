@@ -4,9 +4,106 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:aiTrader"
+        xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+
+    <Window.Resources>
+        <DataTemplate x:Key="profitCellTemplate">
+            <StackPanel Orientation="Horizontal">
+                <Polygon x:Name="typeIdentifier"  Fill="Green" Points="5, 20, 10, 10, 15, 20"/>
+                <Label Content="{Binding Path=Profit}"/>
+            </StackPanel>
+
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding Path=Type}" Value="Profit">
+                    <Setter TargetName="typeIdentifier" Property="Fill" Value="Green"/>
+                    <Setter TargetName="typeIdentifier" Property="Points" Value="5, 20, 10, 10, 15, 20"/>
+                </DataTrigger>
+
+                <DataTrigger Binding="{Binding Path=Type}" Value="Loss">
+                    <Setter TargetName="typeIdentifier" Property="Fill" Value="Red"/>
+                    <Setter TargetName="typeIdentifier" Property="Points" Value="5, 10, 10, 20, 15, 10"/>
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+
+        <local:DateTime2TimeConverter x:Key="date2timeConverter"/>
+
+
+
+    </Window.Resources>
+
+    <Grid DataContext="{StaticResource traderModel}">
+
+        <Grid>
+
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="120"/>
+            </Grid.RowDefinitions>
+
+            <DataGrid AutoGenerateColumns="false" Grid.Row="0" ItemsSource="{Binding Path=Transactions}">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="Profit" CellTemplate="{StaticResource profitCellTemplate}">
+
+                    </DataGridTemplateColumn>
+
+                    <DataGridTextColumn Header="Company" Binding="{Binding Path=Issuer}">
+
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Header="Time stamp" Binding="{Binding Path=TimeStamp, Converter={StaticResource date2timeConverter} }">
+
+                    </DataGridTextColumn>
+
+                </DataGrid.Columns>
+
+
+
+            </DataGrid>
+
+            <Label HorizontalAlignment="Left" Grid.Row="1">Balance:</Label>
+            <Label HorizontalAlignment="Left" Grid.Row="1" Margin="0,20,0,0">0</Label>
+
+            <Button HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Click="Button_Click">Start</Button>
+
+        </Grid>
+
+
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <DockPanel x:Name="settingsPanel" Grid.Column="2" HorizontalAlignment="Center" Width="267">
+
+
+
+                <Button Click="Button_Click" Content=">>">
+                    <Button.Triggers>
+                        <EventTrigger RoutedEvent="Click">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard TargetName="settingsPanel">
+                                        <DoubleAnimation Storyboard.TargetProperty="Width" From="267" To="20"/>
+                                        <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0,0,0,0" To="247,0,0,0"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                    </Button.Triggers>
+                </Button>
+                <StackPanel Background="AliceBlue" Orientation="Vertical" FlowDirection="LeftToRight">
+                    <TextBlock Text="Settings"/>
+                    <TextBox/>
+                </StackPanel>
+            </DockPanel>
+        </Grid>
+
     </Grid>
+
 </Window>
